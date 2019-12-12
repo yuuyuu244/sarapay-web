@@ -42,6 +42,7 @@ public class LoginCheck extends HttpServlet {
 		String pagePath = "ng.jsp";
 		// check the user account.
 		if (user(id, pass)) {
+			// 認証成功時のみ、okページを表示する。
 			pagePath = "ok.jsp";
 		}
 
