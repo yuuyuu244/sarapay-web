@@ -19,12 +19,18 @@ import javax.servlet.http.HttpSession;
  */
 @WebServlet("/LoginCheck")
 public class LoginCheck extends HttpServlet {
-
+	/** ホスト名 */
 	private final String HOST = "localhost:3306";
+	/** DB名 */
 	private final String DB_NAME = "webapp";
+	/** 表名 */
 	private final String TB_NAME = "user";
+	/** URL */
 	private final String URL = "jdbc:mysql://" + HOST + "/" + DB_NAME + "?serverTimezone=JST";
 
+	/**
+	 * ログイン処理を実装
+	 */
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String id = request.getParameter("userid");
 		String pass = request.getParameter("password");
