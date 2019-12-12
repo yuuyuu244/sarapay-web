@@ -20,9 +20,10 @@ import javax.servlet.http.HttpSession;
 @WebServlet("/LoginCheck")
 public class LoginCheck extends HttpServlet {
 
-	private final String HOST = "localhost";
-	private final String DB_NAME = "webbapp";
+	private final String HOST = "localhost:3306";
+	private final String DB_NAME = "webapp";
 	private final String TB_NAME = "user";
+	private final String URL = "jdbc:mysql://" + HOST + "/" + DB_NAME + "?serverTimezone=JST";
 
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String id = request.getParameter("userid");
@@ -65,8 +66,7 @@ public class LoginCheck extends HttpServlet {
 		try {
 			String sql = "select * from " + TB_NAME + " where id = ? and password = ?";
 			Class.forName("com.mysql.cj.jdbc.Driver");
-			Connection con = DriverManager.getConnection("jdbc://" + HOST + "/" +DB_NAME + "?serverTimezone="
-					+ "JST", "root", "root");
+			Connection con = DriverManager.getConnection(URL, "root", "root");
 
 			PreparedStatement stmt = con.prepareStatement(sql);
 			stmt.setString(1, id);
@@ -82,6 +82,7 @@ public class LoginCheck extends HttpServlet {
 			}
 		} catch (Exception ex) {
 			String msg = "ドライバのロードに失敗しました";
+			System.out.println(ex);
 			return false;
 		}
 	}
