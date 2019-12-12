@@ -51,6 +51,12 @@ public class LoginCheck extends HttpServlet {
 
 	}
 
+	/**
+	 * ユーザー認証を行う.
+	 * @param id ID
+	 * @param pass PASSWORD
+	 * @return 認証結果 true:認証成功, false:認証失敗
+	 */
 	protected boolean user(String id, String pass) {
 		// nullのとき
 		if (id == null) {
