@@ -32,11 +32,14 @@ public class LoginCheck extends HttpServlet {
 		System.out.println("ID \t\t:[" + id + "]");
 		System.out.println("PASSWORD \t:[" + pass + "]");
 
+		String pagePath = "ng.jsp";
 		// check the user account.
 		if (user(id, pass)) {
-			RequestDispatcher dispatch = request.getRequestDispatcher("Webapp2");
-			dispatch.forward(request, response);
+			pagePath = "ok.jsp";
 		}
+
+		RequestDispatcher dispatch = request.getRequestDispatcher(pagePath);
+		dispatch.forward(request, response);
 
 	}
 

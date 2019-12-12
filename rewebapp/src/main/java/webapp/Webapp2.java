@@ -25,7 +25,7 @@ public class Webapp2 extends HttpServlet {
 		response.setContentType("text/html; charset="+encoding);
 
 		PrintWriter out = response.getWriter();
-		out.println("<!DOCTYPE html>");
+		out.println("");
 		out.println("<html>");
 		out.println("<head>");
 		out.println("<link rel=\"stylesheet\" href=\"ooptest.css\">");
