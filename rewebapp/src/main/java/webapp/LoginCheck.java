@@ -1,6 +1,10 @@
 package webapp;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -16,43 +20,67 @@ import javax.servlet.http.HttpSession;
 @WebServlet("/LoginCheck")
 public class LoginCheck extends HttpServlet {
 
+	private final String HOST = "localhost";
+	private final String DB_NAME = "webbapp";
+	private final String TB_NAME = "user";
+
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String id = request.getParameter("userid");
 		String pass = request.getParameter("password");
 		HttpSession session = request.getSession(true);
 
-//		boolean check = user(id,pass);
-//		if(check==true) {
-			RequestDispatcher dispatch =request.getRequestDispatcher("Webapp2");
-//			dispatch.forward(request,response);
-//		}
-//
-//	}
-//	protected boolean user(String id,String pass) {
-//		if (id == null || id.length() == 0 || pass == null || pass.length() == 0){
-//		      return false;
-//		    }
-//		try {
-//			String sql = "select * from user where id = ? and password = ?" ;
-//			Class.forName("com.mysql.cj.jdbc.Driver");
-//				Connection con = DriverManager.getConnection("jdbc://192.168.10.11/webapp?serverTimezone="
-//						+ "JST","root","root");
-//
-//				PreparedStatement stmt = con.prepareStatement(sql);
-//				stmt.setString(1,id);
-//				stmt.setString(2,pass);
-//				ResultSet rs = stmt.executeQuery();
-//
-//				if (rs.next()){
-//			        return true;
-//			      }else{
-//			        return false;
-//			      }
-//			}catch(Exception ex) {
-//				String msg = "ドライバのロードに失敗しました";
-//				return false;
-//			}
+		System.out.println("ID \t\t:[" + id + "]");
+		System.out.println("PASSWORD \t:[" + pass + "]");
+
+		// check the user account.
+		if (user(id, pass)) {
+			RequestDispatcher dispatch = request.getRequestDispatcher("Webapp2");
+			dispatch.forward(request, response);
+		}
+
 	}
 
+	protected boolean user(String id, String pass) {
+		// nullのとき
+		if (id == null) {
+			System.out.println("id is null value.");
+			return false;
+		}
+		// lengthが0のとき
+		if (id.length() == 0) {
+			System.out.println("id is empty.");
+			return false;
+		}
+		if(pass == null) {
+			System.out.println("password is null value.");
+			return false;
+		}
+		if (pass.length() == 0) {
+			System.out.println("password is empty.");
+			return false;
+		}
+		try {
+			String sql = "select * from " + TB_NAME + " where id = ? and password = ?";
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc://" + HOST + "/" +DB_NAME + "?serverTimezone="
+					+ "JST", "root", "root");
+
+			PreparedStatement stmt = con.prepareStatement(sql);
+			stmt.setString(1, id);
+			stmt.setString(2, pass);
+			ResultSet rs = stmt.executeQuery();
+
+			if (rs.next()) {
+				System.out.println("exist ID/PASSWORD pattern.");
+				return true;
+			} else {
+				System.out.println("doesn't exist ID/PASSWORD pattern.");
+				return false;
+			}
+		} catch (Exception ex) {
+			String msg = "ドライバのロードに失敗しました";
+			return false;
+		}
+	}
 
 }
